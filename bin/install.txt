@@ -1,0 +1,59 @@
+REALBOT2 2.0.0 - Counter-Strike 1.6
+====================================
+
+REALBOT2 is a server-side Counter-Strike 1.6 bot based on RealBot by
+Stefan Hendriks. It is a Metamod plugin.
+
+REQUIREMENTS
+------------
+- Counter-Strike 1.6 (Steam or a compatible dedicated server)
+- Metamod 1.19 or newer
+- Windows: realbot2/dll/realbot2_mm.dll
+- Linux:   realbot2/dll/realbot2_mm_i386.so
+
+INSTALL
+-------
+1. Unpack the release ZIP into your Half-Life root folder. You should get:
+
+     Half-Life\realbot2\
+     Half-Life\cstrike\
+
+   The realbot2 folder must be next to cstrike and valve.
+
+2. Add REALBOT2 to cstrike\addons\metamod\plugins.ini:
+
+     win32 ../realbot2/dll/realbot2_mm.dll
+
+   On Linux:
+
+     linux ../realbot2/dll/realbot2_mm_i386.so
+
+3. Copy cstrike\realbot2_keys.cfg into your cstrike folder.
+
+4. Add this line to cstrike\autoexec.cfg:
+
+     exec realbot2_keys.cfg
+
+   (Or type it once in the client console.)
+
+5. Start a listen server. Press KP_INS (numpad 0 / Insert) to open the
+   REALBOT2 numeric-keypad menu. Numpad 1-9 selects items, KP_PLUS and
+   KP_MINUS change pages, KP_DEL closes the menu.
+
+The menu is available to the listen-server host only. On a dedicated
+server use the realbot2 console/RCON commands, for example:
+
+     realbot2 add
+     realbot2 add 1 5
+     realbot2 remove 3
+     realbot2 skill -1
+     realbot2 max 15
+
+NOTES
+-----
+- Bots learn maps over time. Walk around a new map before adding many
+  bots, or install existing .rbn waypoint files for popular maps.
+- The old "realbot" console command is kept as an alias for "realbot2".
+- REALBOT2 is GPL-2.0. Original RealBot by Stefan Hendriks:
+  https://github.com/Fundynamic/RealBot
+- This fork: https://github.com/Faker1147/REALBOT2
