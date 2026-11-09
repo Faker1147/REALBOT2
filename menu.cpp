@@ -186,16 +186,18 @@ static bool Menu_AddBot(int team, int skill) {
 static int Menu_FillServer(void) {
     int added = 0;
     int maxClients = gpGlobals->maxClients;
+    int maxBots = (max_bots >= 0) ? max_bots : 32;
 
     if (maxClients > 32) maxClients = 32;
     if (maxClients < 1) maxClients = 1;
-
-    if (max_bots >= 0 && max_bots < maxClients)
-        maxClients = max_bots;
+    if (maxBots > 32) maxBots = 32;
 
     for (int i = 0; i < 32; i++) {
         int t = 0, ct = 0, totalBots = 0;
         Menu_CountBots(&t, &ct, &totalBots);
+
+        if (totalBots >= maxBots)
+            break;
 
         int humans = Menu_CountHumans();
         if (humans + totalBots >= maxClients)

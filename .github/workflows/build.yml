@@ -69,6 +69,7 @@ jobs:
           cp -R bin/data/. dist/realbot2/data/
           cp -R bin/tools/. dist/realbot2/tools/ 2>/dev/null || true
           cp bin/bot.cfg bin/rb_names.txt bin/commandmenu.txt bin/install.txt dist/realbot2/
+          cp README.md dist/realbot2/
           cp bin/realbot2_keys.cfg dist/cstrike/
           cp artifacts/realbot2-windows/realbot2_mm.dll dist/realbot2/dll/
           cp artifacts/realbot2-linux/realbot2_mm_i386.so dist/realbot2/dll/

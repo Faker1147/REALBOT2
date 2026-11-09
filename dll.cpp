@@ -515,7 +515,7 @@ void ClientCommand(edict_t *pEntity) {
     const char *pcmd = CMD_ARGV(0);
 
     // REALBOT2 numpad menu.  The client binds KP_* keys to
-    // "realbot2_menu ..." (see realbot2/keys.cfg).
+    // "realbot2_menu ..." (see realbot2_keys.cfg).
     if (FStrEq(pcmd, "realbot2_menu") || FStrEq(pcmd, "rb2_menu")) {
         Menu_ClientCommand(pEntity, CMD_ARGV(1));
         RETURN_META(MRES_SUPERCEDE);
@@ -1532,11 +1532,11 @@ void RealBot_ServerCommand(void) {
                     Game.iVersionBroadcasting = temp;
                     if (Game.iVersionBroadcasting == BROADCAST_ROUND)
                         sprintf(cMessage,
-                                "RBSERVER: Broadcasting RealBot version every round and map change.\n");
+                                "RBSERVER: Broadcasting REALBOT2 version every round and map change.\n");
 
                     else
                         sprintf(cMessage,
-                                "RBSERVER: Broadcasting RealBot version every map change only.\n");
+                                "RBSERVER: Broadcasting REALBOT2 version every map change only.\n");
                 }
             } else if (FStrEq(arg2, "speech")) {
                 if (arg2 != NULL) {
@@ -1891,7 +1891,7 @@ void RealBot_ServerCommand(void) {
                 sprintf(cMessage, "RBDEBUG: Message verbosity trace.");
                 Game.messageVerbosity = 2; // extreme verbose
             } else {
-                sprintf(cMessage, "RBDEBUG: Usage: realbot debug verbosity [low][normal][trace]");
+                sprintf(cMessage, "RBDEBUG: Usage: realbot2 debug verbosity [low][normal][trace]");
             }
         } else if (FStrEq(arg1, "nodes")) { // realbot debug nodes
             if (FStrEq(arg2, "dumpbmp")) { // realbot debug nodes dumpbmp
@@ -1922,7 +1922,7 @@ void RealBot_ServerCommand(void) {
                     sprintf(cMessage, "RBDEBUG: Creating path from [%d] to [%d].", iFrom, iTo);
                     NodeMachine.createPath(iFrom, iTo, 0, NULL, PATH_DANGER);
                 } else {
-                    sprintf(cMessage, "RBDEBUG: Usage: realbot debug nodes path <fromNode> <toNode>");
+                    sprintf(cMessage, "RBDEBUG: Usage: realbot2 debug nodes path <fromNode> <toNode>");
                 }
             } else if (FStrEq(arg2, "drawpath")) {
                 if ((arg3 != NULL) && (*arg3 != 0))
@@ -1988,7 +1988,7 @@ void RealBot_ServerCommand(void) {
         }
 
         if (!Game.bInstalledCorrectly) {
-            SERVER_PRINT("WARNING: RealBot is NOT installed into the correct directory!\nWARNING: rbn\rbx files will not be created nor personality files!\n");
+            SERVER_PRINT("WARNING: REALBOT2 is NOT installed into the correct directory!\nWARNING: rbn\rbx files will not be created nor personality files!\n");
         }
     }
 }
