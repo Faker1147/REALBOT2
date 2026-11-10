@@ -1,4 +1,4 @@
-REALBOT2 2.1.1 - Counter-Strike 1.6
+REALBOT2 2.1.2 - Counter-Strike 1.6
 ===================================
 
 REALBOT2 is a server-side Counter-Strike 1.6 bot based on RealBot by
@@ -46,6 +46,29 @@ create a realbot2 folder at the Half-Life root.
    REALBOT2 numeric-keypad menu. Numpad 1-9 selects items, KP_PLUS and
    KP_MINUS change pages, KP_DEL closes the menu.
 
+STARTING A DEDICATED SERVER (IMPORTANT)
+---------------------------------------
+Do NOT start hlds.exe by double-clicking it. HLDS needs a game argument;
+without it, this 8684 build crashes immediately and the console window
+just flashes and disappears ("闪退").
+
+Use the included launcher instead:
+
+     cstrike\addons\realbot2\start_server.bat
+
+You can also copy it to the Half-Life root (next to hlds.exe). Double-click
+the .bat file. It sets the correct working directory and starts:
+
+     hlds.exe -game cstrike -console -insecure -norestart
+              +sv_lan 1 +maxplayers 12 +map de_dust2
+
+To use another map:
+
+     start_server.bat de_inferno
+
+If you prefer a command prompt, run the hlds.exe command above manually
+from the Half-Life root folder.
+
 The menu is available to the listen-server host only. On a dedicated
 server use the realbot2 console/RCON commands, for example:
 
@@ -68,6 +91,9 @@ realbot2\data can be copied into cstrike\addons\realbot2\data.
 
 NOTES
 -----
+- 2.1.2 adds start_server.bat and documents the "double-click hlds.exe
+  flashes and closes" crash. It also adds a small bounds-check fix when
+  looking for a free bot slot.
 - 2.1.1 fixes bots that stayed in observer mode. Team selection now uses
   the CS 1.6 jointeam/joinclass commands and retries until the bot has
   joined a team.

@@ -68,7 +68,7 @@ jobs:
           mkdir -p dist/cstrike/addons/realbot2/dll dist/cstrike/addons/realbot2/data dist/cstrike/addons/realbot2/tools
           cp -R bin/data/. dist/cstrike/addons/realbot2/data/
           cp -R bin/tools/. dist/cstrike/addons/realbot2/tools/ 2>/dev/null || true
-          cp bin/bot.cfg bin/rb_names.txt bin/commandmenu.txt bin/install.txt dist/cstrike/addons/realbot2/
+          cp bin/bot.cfg bin/rb_names.txt bin/commandmenu.txt bin/install.txt bin/start_server.bat dist/cstrike/addons/realbot2/
           cp README.md dist/cstrike/addons/realbot2/
           cp bin/realbot2_keys.cfg dist/cstrike/
           cp artifacts/realbot2-windows/realbot2_mm.dll dist/cstrike/addons/realbot2/dll/
@@ -77,18 +77,18 @@ jobs:
           cp docs/REALBOT-ORIGINAL-README.md dist/cstrike/addons/realbot2/
           find dist -name .gitkeep -delete
           cd dist
-          zip -r ../REALBOT2-2.1.1.zip .
+          zip -r ../REALBOT2-2.1.2.zip .
 
       - name: Upload package
         uses: actions/upload-artifact@v4
         with:
           name: REALBOT2-package
-          path: REALBOT2-2.1.1.zip
+          path: REALBOT2-2.1.2.zip
           if-no-files-found: error
 
       - name: Publish GitHub release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: REALBOT2-2.1.1.zip
+          files: REALBOT2-2.1.2.zip
           generate_release_notes: true

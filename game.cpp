@@ -538,7 +538,9 @@ int cGame::createBot(edict_t *pPlayer, const char *teamArg, const char *skillArg
     // find empty bot index
     int freeBotIndex;
     freeBotIndex = 0;
-    while ((bots[freeBotIndex].bIsUsed) && (freeBotIndex < MAX_BOTS))
+    // Check the array bound FIRST: reading bots[MAX_BOTS].bIsUsed before the
+    // bound check would read one element past the end of the array.
+    while ((freeBotIndex < MAX_BOTS) && (bots[freeBotIndex].bIsUsed))
         freeBotIndex++;
 
     if (freeBotIndex == MAX_BOTS) { // failure

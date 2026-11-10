@@ -6,7 +6,7 @@ The original RealBot is a server-side AI opponent for Counter-Strike 1.6. REALBO
 
 - Original project: https://github.com/Fundynamic/RealBot
 - This fork: https://github.com/Faker1147/REALBOT2
-- Version: **2.1.1**
+- Version: **2.1.2**
 - License: **GPL-2.0** (same as the original RealBot source)
 
 ---
@@ -94,6 +94,44 @@ linux addons/realbot2/dll/realbot2_mm_i386.so
 
 > **Upgrading from v2.0.0?** Move `realbot2/dll` and `realbot2/data` into `cstrike/addons/realbot2/`, then update `plugins.ini` to the path above. Existing `.rbn`, `.rbx` and personality files can be copied into `cstrike/addons/realbot2/data`.
 
+## Starting the server (fix for "flash and close" crash)
+
+**Do not double-click `hlds.exe`.** This 8684 HLDS build crashes instantly
+(access violation at `0x5ceb`) when it is started without a game argument,
+so the console window only flashes and disappears. This is not caused by
+REALBOT2.
+
+Use the included launcher:
+
+```text
+cstrike/addons/realbot2/start_server.bat
+```
+
+You can also copy it next to `hlds.exe`. The launcher sets the working
+directory and starts:
+
+```bat
+hlds.exe -game cstrike -console -insecure -norestart +sv_lan 1 +maxplayers 12 +map de_dust2
+```
+
+Optional map argument:
+
+```bat
+start_server.bat de_inferno
+```
+
+The same command can be run manually from the Half-Life root folder. Do
+not close the console window while the server is running.
+
+## What's new in 2.1.2
+
+- Added `start_server.bat`, which starts HLDS with the required
+  `-game cstrike` argument and prevents the "double-click hlds.exe,
+  window flashes and closes" crash.
+- Fixed an off-by-one bounds check when REALBOT2 searches for a free bot
+  slot (`bots[MAX_BOTS]` could be read before the bounds check).
+- Documentation now explains the crash and the correct startup method.
+
 ## What's new in 2.1.1
 
 - **Fixed bots staying in observer mode.** The bot slot is now registered before Counter-Strike sends the team-select menu, so that menu message is no longer lost.
@@ -175,6 +213,7 @@ cstrike/
       tools/
       commandmenu.txt
       install.txt
+      start_server.bat
   realbot2_keys.cfg
 ```
 
@@ -224,6 +263,36 @@ REALBOT2 是基于原版 [RealBot](https://github.com/Fundynamic/RealBot) 的 Co
 4. 在 `cstrike/autoexec.cfg` 中加入 `exec realbot2_keys.cfg`，然后启动游戏，按小键盘 0 打开菜单。
 
 > 从 2.0.0 升级：把原来的 `realbot2/dll` 和 `realbot2/data` 移动到 `cstrike/addons/realbot2/`，再按上面的路径修改 `plugins.ini`。已有的 `.rbn`、`.rbx` 和人格文件可以复制到 `cstrike/addons/realbot2/data`。
+
+### 启动服务器（闪退修复）
+
+**不要直接双击 `hlds.exe`。** 这个 8684 版本的 HLDS 在没有 `-game cstrike` 参数时会立即崩溃（`0x5ceb` 访问冲突），表现就是控制台黑窗口一闪而过。这不是 REALBOT2 引起的。
+
+请使用压缩包内的启动脚本：
+
+```text
+cstrike/addons/realbot2/start_server.bat
+```
+
+也可以把它复制到 `hlds.exe` 旁边。脚本会自动切换到正确目录并执行：
+
+```bat
+hlds.exe -game cstrike -console -insecure -norestart +sv_lan 1 +maxplayers 12 +map de_dust2
+```
+
+换地图：
+
+```bat
+start_server.bat de_inferno
+```
+
+服务器运行期间不要关闭这个控制台窗口。
+
+### 2.1.2 更新内容
+
+- 新增 `start_server.bat` 启动脚本，自动带上 `-game cstrike` 参数，修复“双击 hlds.exe 后窗口一闪而过”的闪退问题。
+- 修复寻找空闲机器人槽位时的数组越界检查（原代码会先读取 `bots[MAX_BOTS]` 再判断下标）。
+- 文档补充闪退原因和正确的服务器启动方式。
 
 ### 2.1.1 更新内容
 
