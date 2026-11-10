@@ -278,8 +278,10 @@ GiveFnptrsToDll(enginefuncs_t *pengfuncsFromEngine,
 
 void GameDLLInit(void) {
     // clear log.txt
+    char logPath[256];
+    UTIL_BuildFileNameRB("reallog.txt", logPath);
     FILE *fplog;
-    fplog = fopen("reallog.txt", "wt");
+    fplog = fopen(logPath, "wt");
 
     if (fplog) {
         fprintf(fplog, "REALBOT2 Logbook\n");
@@ -288,7 +290,7 @@ void GameDLLInit(void) {
     }
 
     // and now open it for the entire bot-dll-lifetime
-    fpRblog = fopen("reallog.txt", "at");
+    fpRblog = fopen(logPath, "at");
 
     rblog("Initializing clients..");
     for (int i = 0; i < 32; i++)
@@ -305,13 +307,16 @@ void GameDLLInit(void) {
 
     FILE *fp;
     bool bInstalledCorrectly = false;
-    fp = fopen("realbot2/dll/realbot2_mm.dll", "rb");
+    char installPath[256];
+    UTIL_BuildFileNameRB("dll/realbot2_mm.dll", installPath);
+    fp = fopen(installPath, "rb");
     if (fp != NULL) {
         bInstalledCorrectly = true;
         fclose(fp);
     }
 
-    fp = fopen("realbot2/dll/realbot2_mm_i386.so", "rb");
+    UTIL_BuildFileNameRB("dll/realbot2_mm_i386.so", installPath);
+    fp = fopen(installPath, "rb");
     if (fp != NULL) {
         bInstalledCorrectly = true;
         fclose(fp);
@@ -1988,7 +1993,7 @@ void RealBot_ServerCommand(void) {
         }
 
         if (!Game.bInstalledCorrectly) {
-            SERVER_PRINT("WARNING: REALBOT2 is NOT installed into the correct directory!\nWARNING: rbn\rbx files will not be created nor personality files!\n");
+            SERVER_PRINT("WARNING: REALBOT2 is NOT installed in cstrike/addons/realbot2!\nWARNING: rbn/rbx files will not be created nor personality files!\n");
         }
     }
 }

@@ -495,12 +495,25 @@ void UTIL_BuildFileNameRB(char *subdir, char *filename) {
 #define S '/'
 #endif
 
-    strcpy(filename, "realbot2/");
+    // REALBOT2 lives in <game dir>/addons/realbot2/ so the Half-Life
+    // root does not need an extra realbot2 folder next to cstrike.
+    const char *gamedir = GET_GAME_DIR();
+    if ((gamedir == NULL) || (*gamedir == 0))
+        gamedir = "cstrike";
+
+    strcpy(filename, gamedir);
+    size_t len = strlen(filename);
+    if ((len > 0) && (filename[len - 1] != '/') && (filename[len - 1] != '\\'))
+        strcat(filename, "/");
+
+    strcat(filename, "addons/realbot2/");
     strcat(filename, subdir);
-    while (*filename) {
-        if ((*filename == '/') && (*filename == '\\'))
-            *filename = S;
-        filename++;
+
+    char *p = filename;
+    while (*p) {
+        if ((*p == '/') || (*p == '\\'))
+            *p = S;
+        p++;
     }
 #if DO_DEBUG != 0
     DebugOut(filenamedebug);

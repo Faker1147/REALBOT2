@@ -6,7 +6,7 @@ The original RealBot is a server-side AI opponent for Counter-Strike 1.6. REALBO
 
 - Original project: https://github.com/Fundynamic/RealBot
 - This fork: https://github.com/Faker1147/REALBOT2
-- Version: **2.0.0**
+- Version: **2.1.0**
 - License: **GPL-2.0** (same as the original RealBot source)
 
 ---
@@ -19,12 +19,13 @@ The original RealBot is a server-side AI opponent for Counter-Strike 1.6. REALBO
 - Legacy `realbot` command is kept as an alias; new command is `realbot2`.
 - CS 1.6 is now the default mode (the original defaulted to CS 1.5).
 - Windows (`realbot2_mm.dll`) and Linux (`realbot2_mm_i386.so`) builds via GitHub Actions.
+- Installs entirely inside `cstrike/addons/realbot2/`; no `realbot2` folder is needed at the Half-Life root.
 
 ## Numpad menu
 
 The menu works on a **listen server** and is available to the local host only. It is implemented by the server plugin, so you only need key bindings on the client.
 
-Copy `cstrike/realbot2_keys.cfg` from the release package into your `cstrike` folder and add this line to `cstrike/autoexec.cfg`:
+After extracting the package, `realbot2_keys.cfg` is already in your `cstrike` folder. Add this line to `cstrike/autoexec.cfg`:
 
 ```cfg
 exec realbot2_keys.cfg
@@ -53,37 +54,45 @@ Example: press `KP_INS`, then `KP_END` to quick-add a bot to the smaller team.
 
 ## Installation (Counter-Strike 1.6)
 
+REALBOT2 now installs **entirely inside the `cstrike` folder**. It does not create a `realbot2` folder at the Half-Life root.
+
 1. Install **Metamod** for your CS 1.6 server. The original Metamod 1.19 works; modern Metamod builds are recommended for current servers.
-2. Copy the `realbot2` folder from the release ZIP to your Half-Life root, next to `cstrike` and `valve`:
+2. Extract the release ZIP into your Half-Life root (the folder containing `cstrike`). The ZIP already contains a `cstrike` folder, so the result is:
 
 ```text
 Half-Life/
   cstrike/
-  valve/
-  realbot2/
-    dll/
-      realbot2_mm.dll
-      realbot2_mm_i386.so
-    data/
-    bot.cfg
-    rb_names.txt
+    addons/
+      realbot2/
+        dll/
+          realbot2_mm.dll
+          realbot2_mm_i386.so
+        data/
+        bot.cfg
+        rb_names.txt
+        install.txt
+    realbot2_keys.cfg
 ```
+
+   If you only have a `cstrike` folder, extract the contents of the ZIP's `cstrike` directory directly into it.
 
 3. Make Metamod load it. In `cstrike/addons/metamod/plugins.ini` add:
 
 ```ini
 ; Windows
-win32 ../realbot2/dll/realbot2_mm.dll
+win32 addons/realbot2/dll/realbot2_mm.dll
 
 ; Linux
-linux ../realbot2/dll/realbot2_mm_i386.so
+linux addons/realbot2/dll/realbot2_mm_i386.so
 ```
 
-4. Copy `cstrike/realbot2_keys.cfg` from the package into `cstrike/` and add `exec realbot2_keys.cfg` to `cstrike/autoexec.cfg`.
+4. Add `exec realbot2_keys.cfg` to `cstrike/autoexec.cfg` (the key config is already in `cstrike/`).
 5. Start a listen server (or dedicated server) on a map. For a listen server, press `KP_INS` to open the menu.
 6. Bots learn maps over time. Walk around a new map for a while before adding many bots, or use existing `.rbn` waypoint files for popular maps.
 
 > The menu is intentionally host-only. On a dedicated server use the `realbot2` console/RCON commands instead.
+
+> **Upgrading from v2.0.0?** Move `realbot2/dll` and `realbot2/data` into `cstrike/addons/realbot2/`, then update `plugins.ini` to the path above. Existing `.rbn`, `.rbx` and personality files can be copied into `cstrike/addons/realbot2/data`.
 
 ## Console commands
 
@@ -147,16 +156,17 @@ The HL SDK and Metamod headers are included in `dependencies/`. The build uses `
 ## Release package layout
 
 ```text
-realbot2/
-  dll/realbot2_mm.dll
-  dll/realbot2_mm_i386.so
-  bot.cfg
-  rb_names.txt
-  data/
-  tools/
-  commandmenu.txt
-  install.txt
 cstrike/
+  addons/
+    realbot2/
+      dll/realbot2_mm.dll
+      dll/realbot2_mm_i386.so
+      bot.cfg
+      rb_names.txt
+      data/
+      tools/
+      commandmenu.txt
+      install.txt
   realbot2_keys.cfg
 ```
 
@@ -176,7 +186,7 @@ REALBOT2 是基于原版 [RealBot](https://github.com/Fundynamic/RealBot) 的 Co
 
 ### 菜单
 
-- 将 `cstrike/realbot2_keys.cfg` 复制到 CS 1.6 的 `cstrike` 目录。
+- 发布包解压后，`cstrike/realbot2_keys.cfg` 已经在 CS 1.6 的 `cstrike` 目录中。
 - 在 `cstrike/autoexec.cfg` 中加入 `exec realbot2_keys.cfg`（或在控制台输入一次）。
 - 进入单机/监听服务器后，按 `KP_INS`（小键盘 0 / Insert）打开菜单。
 - 小键盘 `1`-`9` 选择项目，`KP_PLUS`/`KP_MINUS` 翻页，`KP_DEL` 关闭。
@@ -184,17 +194,28 @@ REALBOT2 是基于原版 [RealBot](https://github.com/Fundynamic/RealBot) 的 Co
 
 ### 安装
 
+从 2.1.0 开始，REALBOT2 **只安装在 `cstrike` 目录内**，不会再在 Half-Life 根目录创建 `realbot2` 文件夹。
+
 1. 安装 Metamod。
-2. 把发布包里的 `realbot2` 文件夹放到 Half-Life 根目录（和 `cstrike` 同级）。
+2. 将发布包解压到 Half-Life 根目录（包含 `cstrike` 的那一层）。压缩包内已经带有 `cstrike` 文件夹，解压后文件位于：
+   ```text
+   cstrike/addons/realbot2/dll/realbot2_mm.dll
+   cstrike/addons/realbot2/dll/realbot2_mm_i386.so
+   cstrike/addons/realbot2/data/
+   cstrike/realbot2_keys.cfg
+   ```
+   如果你只有 `cstrike` 文件夹，也可以把压缩包内 `cstrike` 目录里的内容直接解压到你的 `cstrike` 中。
 3. 在 `cstrike/addons/metamod/plugins.ini` 中加入：
    ```ini
-   win32 ../realbot2/dll/realbot2_mm.dll
+   win32 addons/realbot2/dll/realbot2_mm.dll
    ```
    Linux 服务器使用：
    ```ini
-   linux ../realbot2/dll/realbot2_mm_i386.so
+   linux addons/realbot2/dll/realbot2_mm_i386.so
    ```
-4. 启动游戏，按小键盘 0 打开菜单。
+4. 在 `cstrike/autoexec.cfg` 中加入 `exec realbot2_keys.cfg`，然后启动游戏，按小键盘 0 打开菜单。
+
+> 从 2.0.0 升级：把原来的 `realbot2/dll` 和 `realbot2/data` 移动到 `cstrike/addons/realbot2/`，再按上面的路径修改 `plugins.ini`。已有的 `.rbn`、`.rbx` 和人格文件可以复制到 `cstrike/addons/realbot2/data`。
 
 ### 编译
 

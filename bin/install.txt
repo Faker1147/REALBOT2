@@ -1,5 +1,5 @@
-REALBOT2 2.0.0 - Counter-Strike 1.6
-====================================
+REALBOT2 2.1.0 - Counter-Strike 1.6
+===================================
 
 REALBOT2 is a server-side Counter-Strike 1.6 bot based on RealBot by
 Stefan Hendriks. It is a Metamod plugin.
@@ -8,35 +8,41 @@ REQUIREMENTS
 ------------
 - Counter-Strike 1.6 (Steam or a compatible dedicated server)
 - Metamod 1.19 or newer
-- Windows: realbot2/dll/realbot2_mm.dll
-- Linux:   realbot2/dll/realbot2_mm_i386.so
+- Windows: cstrike/addons/realbot2/dll/realbot2_mm.dll
+- Linux:   cstrike/addons/realbot2/dll/realbot2_mm_i386.so
 
 INSTALL
 -------
-1. Unpack the release ZIP into your Half-Life root folder. You should get:
+REALBOT2 is installed entirely inside the cstrike folder. It does not
+create a realbot2 folder at the Half-Life root.
 
-     Half-Life\realbot2\
-     Half-Life\cstrike\
+1. Unpack the release ZIP into your Half-Life root folder (the folder
+   that contains cstrike). The ZIP already contains a cstrike folder,
+   so you should get:
 
-   The realbot2 folder must be next to cstrike and valve.
+     Half-Life\cstrike\addons\realbot2\dll\realbot2_mm.dll
+     Half-Life\cstrike\addons\realbot2\dll\realbot2_mm_i386.so
+     Half-Life\cstrike\addons\realbot2\data\
+     Half-Life\cstrike\realbot2_keys.cfg
+
+   If you only have a cstrike folder, extract the contents of the ZIP's
+   cstrike directory directly into it.
 
 2. Add REALBOT2 to cstrike\addons\metamod\plugins.ini:
 
-     win32 ../realbot2/dll/realbot2_mm.dll
+     win32 addons/realbot2/dll/realbot2_mm.dll
 
    On Linux:
 
-     linux ../realbot2/dll/realbot2_mm_i386.so
+     linux addons/realbot2/dll/realbot2_mm_i386.so
 
-3. Copy cstrike\realbot2_keys.cfg into your cstrike folder.
-
-4. Add this line to cstrike\autoexec.cfg:
+3. Add this line to cstrike\autoexec.cfg:
 
      exec realbot2_keys.cfg
 
    (Or type it once in the client console.)
 
-5. Start a listen server. Press KP_INS (numpad 0 / Insert) to open the
+4. Start a listen server. Press KP_INS (numpad 0 / Insert) to open the
    REALBOT2 numeric-keypad menu. Numpad 1-9 selects items, KP_PLUS and
    KP_MINUS change pages, KP_DEL closes the menu.
 
@@ -48,6 +54,17 @@ server use the realbot2 console/RCON commands, for example:
      realbot2 remove 3
      realbot2 skill -1
      realbot2 max 15
+
+UPGRADING FROM 2.0.0
+--------------------
+Version 2.0.0 used a realbot2 folder at the Half-Life root. To upgrade:
+
+1. Move realbot2\dll and realbot2\data into cstrike\addons\realbot2\.
+2. Change plugins.ini to the new path shown above.
+3. Keep cstrike\realbot2_keys.cfg where it is.
+
+Existing waypoint files, personality files and learned data in
+realbot2\data can be copied into cstrike\addons\realbot2\data.
 
 NOTES
 -----

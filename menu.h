@@ -4,7 +4,7 @@
   * The menu is intentionally implemented server-side so it works on a
   * listen server without installing any client-side files.  The player
   * binds the numeric keypad keys to "realbot2_menu ..." commands (see
-  * realbot2/keys.cfg).
+  * cstrike/realbot2_keys.cfg).
   **/
 
 #ifndef REALBOT2_MENU_H
