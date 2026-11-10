@@ -52,12 +52,15 @@ Do NOT start hlds.exe by double-clicking it. HLDS needs a game argument;
 without it, this 8684 build crashes immediately and the console window
 just flashes and disappears ("闪退").
 
-Use the included launcher instead:
+Use the included launcher instead. The same script ships under three
+names:
 
+     启动服务器.bat                          (package root, next to hlds.exe)
+     cstrike\addons\realbot2\启动服务器.bat
      cstrike\addons\realbot2\start_server.bat
 
-You can also copy it to the Half-Life root (next to hlds.exe). Double-click
-the .bat file. It sets the correct working directory and starts:
+The easiest way: extract the ZIP into the Half-Life root and double-click
+the root 启动服务器.bat. It sets the correct working directory and starts:
 
      hlds.exe -game cstrike -console -insecure -norestart
               +sv_lan 1 +maxplayers 12 +map de_dust2
@@ -91,9 +94,9 @@ realbot2\data can be copied into cstrike\addons\realbot2\data.
 
 NOTES
 -----
-- 2.1.2 adds start_server.bat and documents the "double-click hlds.exe
-  flashes and closes" crash. It also adds a small bounds-check fix when
-  looking for a free bot slot.
+- 2.1.2 adds 启动服务器.bat / start_server.bat and documents the
+  "double-click hlds.exe flashes and closes" crash. It also adds a small
+  bounds-check fix when looking for a free bot slot.
 - 2.1.1 fixes bots that stayed in observer mode. Team selection now uses
   the CS 1.6 jointeam/joinclass commands and retries until the bot has
   joined a team.

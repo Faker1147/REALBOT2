@@ -68,7 +68,8 @@ jobs:
           mkdir -p dist/cstrike/addons/realbot2/dll dist/cstrike/addons/realbot2/data dist/cstrike/addons/realbot2/tools
           cp -R bin/data/. dist/cstrike/addons/realbot2/data/
           cp -R bin/tools/. dist/cstrike/addons/realbot2/tools/ 2>/dev/null || true
-          cp bin/bot.cfg bin/rb_names.txt bin/commandmenu.txt bin/install.txt bin/start_server.bat dist/cstrike/addons/realbot2/
+          cp bin/bot.cfg bin/rb_names.txt bin/commandmenu.txt bin/install.txt bin/start_server.bat bin/启动服务器.bat dist/cstrike/addons/realbot2/
+          cp bin/启动服务器.bat dist/
           cp README.md dist/cstrike/addons/realbot2/
           cp bin/realbot2_keys.cfg dist/cstrike/
           cp artifacts/realbot2-windows/realbot2_mm.dll dist/cstrike/addons/realbot2/dll/

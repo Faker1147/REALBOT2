@@ -101,13 +101,16 @@ linux addons/realbot2/dll/realbot2_mm_i386.so
 so the console window only flashes and disappears. This is not caused by
 REALBOT2.
 
-Use the included launcher:
+Use the included launcher (both names are the same script):
 
 ```text
+启动服务器.bat                              (package root / next to hlds.exe)
+cstrike/addons/realbot2/启动服务器.bat
 cstrike/addons/realbot2/start_server.bat
 ```
 
-You can also copy it next to `hlds.exe`. The launcher sets the working
+The package root `启动服务器.bat` is the easiest: extract the ZIP into the
+Half-Life root, then double-click it. The launcher sets the working
 directory and starts:
 
 ```bat
@@ -125,9 +128,9 @@ not close the console window while the server is running.
 
 ## What's new in 2.1.2
 
-- Added `start_server.bat`, which starts HLDS with the required
-  `-game cstrike` argument and prevents the "double-click hlds.exe,
-  window flashes and closes" crash.
+- Added `启动服务器.bat` / `start_server.bat`, which starts HLDS with the
+  required `-game cstrike` argument and prevents the "double-click
+  hlds.exe, window flashes and closes" crash.
 - Fixed an off-by-one bounds check when REALBOT2 searches for a free bot
   slot (`bots[MAX_BOTS]` could be read before the bounds check).
 - Documentation now explains the crash and the correct startup method.
@@ -214,7 +217,9 @@ cstrike/
       commandmenu.txt
       install.txt
       start_server.bat
+      启动服务器.bat
   realbot2_keys.cfg
+启动服务器.bat        (optional copy at the Half-Life root)
 ```
 
 ## Credits
@@ -268,13 +273,15 @@ REALBOT2 是基于原版 [RealBot](https://github.com/Fundynamic/RealBot) 的 Co
 
 **不要直接双击 `hlds.exe`。** 这个 8684 版本的 HLDS 在没有 `-game cstrike` 参数时会立即崩溃（`0x5ceb` 访问冲突），表现就是控制台黑窗口一闪而过。这不是 REALBOT2 引起的。
 
-请使用压缩包内的启动脚本：
+请使用压缩包内的启动脚本（三个文件名是同一个脚本）：
 
 ```text
+启动服务器.bat                              （压缩包根目录，和 hlds.exe 放一起）
+cstrike/addons/realbot2/启动服务器.bat
 cstrike/addons/realbot2/start_server.bat
 ```
 
-也可以把它复制到 `hlds.exe` 旁边。脚本会自动切换到正确目录并执行：
+最简单的用法：把 ZIP 解压到 Half-Life 根目录，直接双击根目录的 `启动服务器.bat`。脚本会自动切换到正确目录并执行：
 
 ```bat
 hlds.exe -game cstrike -console -insecure -norestart +sv_lan 1 +maxplayers 12 +map de_dust2
@@ -290,7 +297,7 @@ start_server.bat de_inferno
 
 ### 2.1.2 更新内容
 
-- 新增 `start_server.bat` 启动脚本，自动带上 `-game cstrike` 参数，修复“双击 hlds.exe 后窗口一闪而过”的闪退问题。
+- 新增 `启动服务器.bat` / `start_server.bat` 启动脚本，自动带上 `-game cstrike` 参数，修复“双击 hlds.exe 后窗口一闪而过”的闪退问题。发布包根目录放了一份 `启动服务器.bat`，解压后直接双击即可。
 - 修复寻找空闲机器人槽位时的数组越界检查（原代码会先读取 `bots[MAX_BOTS]` 再判断下标）。
 - 文档补充闪退原因和正确的服务器启动方式。
 
