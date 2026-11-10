@@ -577,6 +577,23 @@ int cGame::createBot(edict_t *pPlayer, const char *teamArg, const char *skillArg
     (*g_engfuncs.pfnSetClientKeyValue)(clientIndex, infobuffer, "ah", "1");
     (*g_engfuncs.pfnSetClientKeyValue)(clientIndex, infobuffer, "_vgui_menus", "0");
 
+    // Register this bot slot BEFORE letting the MOD connect the fake client.
+    //
+    // Counter-Strike 1.6 sends the team-select menu from inside
+    // ClientPutInServer().  That message is routed through pfnMessageBegin(),
+    // which uses UTIL_GetBotIndex() to find out which bot the message belongs
+    // to.  If the slot is not registered yet the lookup returns -1, the menu
+    // is ignored, start_action stays IDLE and the bot remains an observer
+    // forever.  This was the root cause of the "bots join as spectators" bug.
+    cBot *pBot = &bots[freeBotIndex];
+
+    pBot->iBotIndex = freeBotIndex;
+    pBot->bIsUsed = true;
+    pBot->pEdict = pBotEdict;
+    pBot->hasJoinedTeam = false;   // hasn't joined game yet
+    pBot->start_action = MSG_CS_IDLE;
+    pBot->name[0] = 0;        // name not set by server yet
+
     MDLL_ClientConnect(pBotEdict, botName, "127.0.0.1", ptr);
 
     // Pieter van Dijk - use instead of DispatchSpawn() - Hip Hip Hurray!
@@ -585,17 +602,13 @@ int cGame::createBot(edict_t *pPlayer, const char *teamArg, const char *skillArg
 
     // initialize all the variables for this bot...
 
-    // Retrieve Pointer
-    cBot *pBot = &bots[freeBotIndex];
-
     // TODO: Stefan 05/09/2019 - init function? (re-use, so much duplication here)
-    // Set variables
-    pBot->iBotIndex = freeBotIndex;
-    pBot->bIsUsed = true;
+    // Set variables (the slot itself was already registered before the MOD
+    // connection above; do NOT reset start_action here, it may already hold
+    // the team-select menu notification).
     pBot->respawn_state = RESPAWN_IDLE;
     pBot->fCreateTime = gpGlobals->time;
     pBot->fKickTime = 0.0;
-    pBot->name[0] = 0;        // name not set by server yet
     pBot->bot_money = 0;
 
     // clear
@@ -603,11 +616,6 @@ int cGame::createBot(edict_t *pPlayer, const char *teamArg, const char *skillArg
     memset(c_skin, 0, sizeof(c_skin));
     strcpy(pBot->skin, c_skin);
 
-    pBot->pEdict = pBotEdict;
-    pBot->hasJoinedTeam = false;   // hasn't joined game yet
-
-    // CS Message IDLE..
-    pBot->start_action = MSG_CS_IDLE;
     pBot->SpawnInit();
     pBot->bInitialize = false;        // don't need to initialize yet
     pBotEdict->v.idealpitch = pBotEdict->v.v_angle.x;

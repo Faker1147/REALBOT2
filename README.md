@@ -6,7 +6,7 @@ The original RealBot is a server-side AI opponent for Counter-Strike 1.6. REALBO
 
 - Original project: https://github.com/Fundynamic/RealBot
 - This fork: https://github.com/Faker1147/REALBOT2
-- Version: **2.1.0**
+- Version: **2.1.1**
 - License: **GPL-2.0** (same as the original RealBot source)
 
 ---
@@ -93,6 +93,14 @@ linux addons/realbot2/dll/realbot2_mm_i386.so
 > The menu is intentionally host-only. On a dedicated server use the `realbot2` console/RCON commands instead.
 
 > **Upgrading from v2.0.0?** Move `realbot2/dll` and `realbot2/data` into `cstrike/addons/realbot2/`, then update `plugins.ini` to the path above. Existing `.rbn`, `.rbx` and personality files can be copied into `cstrike/addons/realbot2/data`.
+
+## What's new in 2.1.1
+
+- **Fixed bots staying in observer mode.** The bot slot is now registered before Counter-Strike sends the team-select menu, so that menu message is no longer lost.
+- Team selection now uses the CS 1.6 `jointeam` / `joinclass` commands (the same approach as AMX Mod X) and retries every 2 seconds until the bot has actually joined a team.
+- See the warning below about running multiple bot cores at the same time.
+
+> **Important:** use only ONE bot core per server. Remove or comment out every other bot plugin in `cstrike/addons/metamod/plugins.ini` (AMX Mod X bot add-ons, csbot_enabler, sypb, PodBot, YaPB, EBot, FAPB, HPB_Bot, etc.) and keep only REALBOT2. Multiple bot cores fight over the same fake clients and usually leave the bots as observers or crash the server.
 
 ## Console commands
 
@@ -216,6 +224,14 @@ REALBOT2 是基于原版 [RealBot](https://github.com/Fundynamic/RealBot) 的 Co
 4. 在 `cstrike/autoexec.cfg` 中加入 `exec realbot2_keys.cfg`，然后启动游戏，按小键盘 0 打开菜单。
 
 > 从 2.0.0 升级：把原来的 `realbot2/dll` 和 `realbot2/data` 移动到 `cstrike/addons/realbot2/`，再按上面的路径修改 `plugins.ini`。已有的 `.rbn`、`.rbx` 和人格文件可以复制到 `cstrike/addons/realbot2/data`。
+
+### 2.1.1 更新内容
+
+- **修复机器人加入服务器后一直停留在观察者（旁观）模式的问题。** 现在会在 Counter-Strike 发送选队菜单之前就注册机器人槽位，菜单消息不会再丢失。
+- 选队改为直接发送 CS 1.6 的 `jointeam` / `joinclass` 命令（与 AMX Mod X 的做法相同），并且每 2 秒重试一次，直到机器人真正加入队伍。
+- 增加了下方关于“只能启用一个机器人核心”的重要提示。
+
+> **重要：一个服务器只能启用一个机器人核心。** 请删除或注释掉 `cstrike/addons/metamod/plugins.ini` 中所有其他机器人插件（AMX Mod X 的机器人扩展、csbot_enabler、sypb、PodBot、YaPB、EBot、FAPB、HPB_Bot 等），只保留 REALBOT2。多个机器人核心会同时争抢同一批假客户端，通常会导致机器人始终是观察者，甚至让服务器崩溃。
 
 ### 编译
 

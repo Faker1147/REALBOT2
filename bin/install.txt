@@ -1,4 +1,4 @@
-REALBOT2 2.1.0 - Counter-Strike 1.6
+REALBOT2 2.1.1 - Counter-Strike 1.6
 ===================================
 
 REALBOT2 is a server-side Counter-Strike 1.6 bot based on RealBot by
@@ -68,6 +68,14 @@ realbot2\data can be copied into cstrike\addons\realbot2\data.
 
 NOTES
 -----
+- 2.1.1 fixes bots that stayed in observer mode. Team selection now uses
+  the CS 1.6 jointeam/joinclass commands and retries until the bot has
+  joined a team.
+- Use only ONE bot core per server. Remove or comment out every other
+  bot plugin in cstrike/addons/metamod/plugins.ini (csbot_enabler, sypb,
+  PodBot, YaPB, EBot, FAPB, HPB_Bot, AMX Mod X bot add-ons, etc.) and
+  keep only REALBOT2. Multiple bot cores fight over the same fake
+  clients and can leave bots as observers or crash the server.
 - Bots learn maps over time. Walk around a new map before adding many
   bots, or install existing .rbn waypoint files for popular maps.
 - The old "realbot" console command is kept as an alias for "realbot2".

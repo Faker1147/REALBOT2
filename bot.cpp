@@ -173,6 +173,7 @@ void cBot::SpawnInit() {
     f_console_timer = gpGlobals->time + RANDOM_FLOAT(0.1, 0.9);
     fWanderTime = gpGlobals->time;
     f_strafe_time = gpGlobals->time;
+    fJoinTeamAttempt = gpGlobals->time;   // try to join a team right away
 
     // Personality Related (these gets changed when loading personality file)
     fpXOffset = 0.0;
@@ -1605,96 +1606,63 @@ void cBot::JoinTeam() {
     if (mod_id != CSTRIKE_DLL) return;
     // When bot plays Counter-Strike (only Counter-Strike is supported)
 
-    char c_team[32];
-    char c_class[32];
-
-    // Choose team first
-    if (start_action == MSG_CS_TEAM_SELECT) {
-        start_action = MSG_CS_IDLE;    // switch back to idle
-
-        // in case of bad state/input fall-back to 'pick one for me'
-        if ((iTeam != 1) && (iTeam != 2) && (iTeam != 5)) {
-            iTeam = 5;
+    // UTIL_GetTeam() reads the "model" client key.  Counter-Strike only sets
+    // it once the client has actually joined a team (0 = Terrorist,
+    // 1 = Counter-Terrorist, -1 = still unassigned / observer).
+    if (UTIL_GetTeam(pEdict) >= 0) {
+        if (!hasJoinedTeam) {
+            rprint("JoinTeam()", "Bot joined a team, leaving observer mode");
         }
-
-        // select the team the bot wishes to join...
-        if (iTeam == 1) {
-            strcpy(c_team, "1");
-        } else if (iTeam == 2) {
-            strcpy(c_team, "2");
-        } else {
-            strcpy(c_team, "5");
-        }
-
-        // choose
-        FakeClientCommand(this->pEdict, "menuselect", c_team, NULL);
-
+        hasJoinedTeam = true;
+        start_action = MSG_CS_IDLE;
         return;
     }
 
-    // counter terrorist menu, which class/outfit?
-    if (start_action == MSG_CS_CT_SELECT) {
-        start_action = MSG_CS_IDLE;    // switch back to idle
-
-        if ((bot_class < 1) || (bot_class > 4))
-            bot_class = 5;      // use random if invalid
-
-        // Since cs 1.6 does not give us pretty random models
-        // we do it ourselves
-        if (bot_class == 5) {
-            bot_class = RANDOM_LONG(1, 4);
-        }
-
-        // select the class the bot wishes to use...
-        if (bot_class == 1)
-            strcpy(c_class, "1");
-        else if (bot_class == 2)
-            strcpy(c_class, "2");
-        else if (bot_class == 3)
-            strcpy(c_class, "3");
-        else if (bot_class == 4)
-            strcpy(c_class, "4");
-        else
-            strcpy(c_class, "5");       // random
-
-        FakeClientCommand(this->pEdict, "menuselect", c_class, NULL);
-
-        // bot has now joined a team
-        hasJoinedTeam = true;
-
+    // Do not flood the MOD with join commands every frame.
+    if (fJoinTeamAttempt > gpGlobals->time) {
         return;
     }
+    fJoinTeamAttempt = gpGlobals->time + 2.0f;
 
-    // terrorist select
-    if (start_action == MSG_CS_T_SELECT) {
-        start_action = MSG_CS_IDLE;    // switch back to idle
+    // Pick the team the bot wishes to join.  Values 1 (T) and 2 (CT) are
+    // explicit; anything else (including "auto select" 5) is resolved to a
+    // random team here so we never depend on the menu layout.
+    int team = iTeam;
+    if ((team != 1) && (team != 2)) {
+        team = RANDOM_LONG(1, 2);
+    }
 
-        if ((bot_class < 1) || (bot_class > 4))
-            bot_class = 5;      // use random if invalid
+    int playerClass = bot_class;
+    if ((playerClass < 1) || (playerClass > 4)) {
+        // Since CS 1.6 does not give us pretty random models we do it ourselves
+        playerClass = RANDOM_LONG(1, 4);
+    }
 
-        // Since cs 1.6 does not give us pretty random models
-        // we do it ourselves
-        if (bot_class == 5)
-            bot_class = RANDOM_LONG(1, 4);
+    char c_team[16];
+    char c_class[16];
+    sprintf(c_team, "%d", team);
+    sprintf(c_class, "%d", playerClass);
 
-        // select the class the bot wishes to use...
-        if (bot_class == 1)
-            strcpy(c_class, "1");
-        else if (bot_class == 2)
-            strcpy(c_class, "2");
-        else if (bot_class == 3)
-            strcpy(c_class, "3");
-        else if (bot_class == 4)
-            strcpy(c_class, "4");
-        else
-            strcpy(c_class, "5");       // random
+    // CS 1.6 supports these client commands directly (the same approach used
+    // by AMX Mod X's plmenu.sma).  The old "menuselect" reply is unreliable:
+    // it depends on the exact menu text/layout and is silently dropped if the
+    // menu message is missed.  Sending the commands directly also lets us
+    // retry every couple of seconds when the first attempt was ignored (for
+    // example because the bot was still connecting).
+    rprint("JoinTeam()", "Sending jointeam/joinclass commands");
 
-        FakeClientCommand(this->pEdict, "menuselect", c_class, NULL);
+    FakeClientCommand(pEdict, "jointeam", c_team, NULL);
+    FakeClientCommand(pEdict, "joinclass", c_class, NULL);
 
-        // bot has now joined the game (doesn't need to be started)
+    // The MOD may have opened a team/class menu while handling the commands
+    // above; the bot has already answered it directly, so clear the trigger.
+    start_action = MSG_CS_IDLE;
+
+    // If the commands were accepted immediately we are done.  Otherwise the
+    // next Think() will see hasJoinedTeam == false and retry in ~2 seconds.
+    if (UTIL_GetTeam(pEdict) >= 0) {
         hasJoinedTeam = true;
-
-        return;
+        rprint("JoinTeam()", "Bot joined a team, leaving observer mode");
     }
 }
 

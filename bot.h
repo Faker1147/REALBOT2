@@ -345,6 +345,7 @@ public:
 
     bool hasJoinedTeam;
     int start_action;
+    float fJoinTeamAttempt;      // next time (gpGlobals->time) we retry joining a team
 
     int iPreviousGoalNode;        // Previous goal
     int iCloseNode;                // The closest node to this bot.
